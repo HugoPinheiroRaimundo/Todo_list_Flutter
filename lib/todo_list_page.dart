@@ -27,11 +27,17 @@ class TodoListPageState extends State<TodoListPage> {
             ),
             Container(
               height: 400,
-              child: ListView.builder(
+              child: ListView.separated(
+                separatorBuilder: (context, index) => const Divider(),
                 itemCount: tarefas.length,
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text(tarefas[index]),
+                    onLongPress: () {
+                      setState(() {
+                        tarefas.removeAt(index);
+                      });
+                    },
                   );
                 },
               ),
@@ -39,19 +45,36 @@ class TodoListPageState extends State<TodoListPage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        onPressed: () {
-          if (_textEditingController.text.length > 0) {
-            setState(() {
-              tarefas.add(_textEditingController.text);
-            });
-            _textEditingController.clear();
-          }
+      floatingActionButton: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            backgroundColor: Colors.blue,
+            onPressed: () {
+              if (_textEditingController.text.length > 0) {
+                setState(() {
+                  tarefas.add(_textEditingController.text);
+                });
+                _textEditingController.clear();
+              }
 
-          print(tarefas);
-        },
-        child: const Icon(Icons.add),
+              print(tarefas);
+            },
+            child: const Icon(Icons.add),
+          ),
+          FloatingActionButton(
+            backgroundColor: Colors.blue,
+            onPressed: () {
+              setState(() {
+                tarefas = [];
+              });
+              _textEditingController.clear();
+              print(tarefas);
+            },
+            child: const Icon(Icons.remove),
+          ),
+        ],
       ),
     );
   }
